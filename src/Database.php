@@ -26,7 +26,7 @@ interface Database {
 	 *
 	 * @param string $query the SQL query to select with
 	 * @param array|null $bindValues (optional) the values to bind as replacements for the `?` characters in the query
-	 * @return array the rows and columns returned by the server
+	 * @return array|null the rows and columns returned by the server or `null` if no results have been found
 	 */
 	public function select($query, array $bindValues = null);
 
@@ -39,7 +39,7 @@ interface Database {
 	 *
 	 * @param string $query the SQL query to select with
 	 * @param array|null $bindValues (optional) the values to bind as replacements for the `?` characters in the query
-	 * @return mixed the value of the first column in the first row returned by the server
+	 * @return mixed|null the value of the first column in the first row returned by the server or `null` if no results have been found
 	 */
 	public function selectValue($query, array $bindValues = null);
 
@@ -52,7 +52,7 @@ interface Database {
 	 *
 	 * @param string $query the SQL query to select with
 	 * @param array|null $bindValues (optional) the values to bind as replacements for the `?` characters in the query
-	 * @return array the first row returned by the server
+	 * @return array|null the first row returned by the server or `null` if no results have been found
 	 */
 	public function selectRow($query, array $bindValues = null);
 
@@ -65,7 +65,7 @@ interface Database {
 	 *
 	 * @param string $query the SQL query to select with
 	 * @param array|null $bindValues (optional) the values to bind as replacements for the `?` characters in the query
-	 * @return array the first column returned by the server
+	 * @return array|null the first column returned by the server or `null` if no results have been found
 	 */
 	public function selectColumn($query, array $bindValues = null);
 

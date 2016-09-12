@@ -551,7 +551,16 @@ final class PdoDatabase implements Database {
 
 		$this->denormalizeConnection();
 
-		return $results;
+		// if the result is empty
+		if (empty($results) && $stmt->rowCount() === 0) {
+			// consistently return `null`
+			return null;
+		}
+		// if some results have been found
+		else {
+			// return these as extracted by the callback
+			return $results;
+		}
 	}
 
 }
