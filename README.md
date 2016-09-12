@@ -99,27 +99,37 @@ $rows = $db->select('SELECT id, name FROM books');
 
 // or
 
-$rows = $db->select('SELECT name, year FROM books WHERE author = ? ORDER BY copies DESC LIMIT 0, 10', [
-    'Charles Dickens'
-]);
+$rows = $db->select(
+    'SELECT name, year FROM books WHERE author = ? ORDER BY copies DESC LIMIT 0, 10',
+    [ 'Charles Dickens' ]
+);
 
 // or
 
-$row = $db->selectRow('SELECT author, year FROM books WHERE author <> ? ORDER BY year ASC LIMIT 0, 1', [
-    'Miguel de Cervantes'
-]);
+$row = $db->selectRow(
+    'SELECT author, year FROM books WHERE author <> ? ORDER BY year ASC LIMIT 0, 1',
+    [ 'Miguel de Cervantes' ]
+);
 
 // or
 
-$value = $db->selectValue('SELECT year FROM books WHERE name <> ? ORDER BY year DESC LIMIT 0, 1', [
-    'Tale of Two Cities'
-]);
+$value = $db->selectValue(
+    'SELECT year FROM books WHERE name <> ? AND name <> ? ORDER BY year DESC LIMIT 0, 1',
+    [
+        'Tale of Two Cities',
+        'Alice in Wonderland'
+    ]
+);
 
 // or
 
-$column = $db->selectColumn('SELECT author FROM books ORDER BY copies DESC LIMIT 0, ?', [
-    3
-]);
+$column = $db->selectColumn(
+    'SELECT author FROM books ORDER BY copies DESC LIMIT ?, ?',
+    [
+        0,
+        3
+    ]
+);
 ```
 
 ### Inserting data
@@ -127,12 +137,15 @@ $column = $db->selectColumn('SELECT author FROM books ORDER BY copies DESC LIMIT
 For simple insertions, you can use a convenient shorthand:
 
 ```php
-$db->insert('books', [
-    // set
-    'name' => 'Don Quixote',
-    'author' => 'Miguel de Cervantes',
-    'year' => 1612
-]);
+$db->insert(
+    'books',
+    [
+        // set
+        'name' => 'Don Quixote',
+        'author' => 'Miguel de Cervantes',
+        'year' => 1612
+    ]
+);
 ```
 
 Does your table have automatically generated primary IDs? Access to these inserted IDs is available with another short method call. The sequence name is only required for *some* database drivers, e.g. PostgreSQL.
@@ -150,14 +163,18 @@ If you need to execute more advanced statements, please refer to section "Execut
 For simple updates, you can use a convenient shorthand as well:
 
 ```php
-$db->update('books', [
-    // set
-    'author' => 'J. K. Rowling',
-    'copies' => 2
-], [
-    // where
-    'name' => "Harry Potter and the Philosopher's Stone"
-]);
+$db->update(
+    'books',
+    [
+        // set
+        'author' => 'J. K. Rowling',
+        'copies' => 2
+    ],
+    [
+        // where
+        'name' => "Harry Potter and the Philosopher's Stone"
+    ]
+);
 ```
 
 Do you want to know how many rows have been updated by this operation? Just grab the return value from the `update` method call.
@@ -169,11 +186,14 @@ If you need to execute more advanced statements, please refer to section "Execut
 Again, for simple deletions, you can use a convenient shorthand:
 
 ```php
-$db->delete('books', [
-    // where
-    'author' => 'C. S. Lewis',
-    'year' => 1949
-]);
+$db->delete(
+    'books',
+    [
+        // where
+        'author' => 'C. S. Lewis',
+        'year' => 1949
+    ]
+);
 ```
 
 The return value from the `delete` method call will tell you how many rows have been deleted by this operation.
@@ -185,18 +205,24 @@ If you need to execute more advanced statements, please refer to section "Execut
 You can execute any arbitrary SQL statements as shown in the following examples:
 
 ```php
-$db->exec('INSERT INTO books (name, author, year) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE copies = copies + 1', [
-    "Harry Potter and the Philosopher's Stone",
-    'J. K. Rowling',
-    1997
-]);
+$db->exec(
+    'INSERT INTO books (name, author, year) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE copies = copies + 1',
+    [
+        "Harry Potter and the Philosopher's Stone",
+        'J. K. Rowling',
+        1997
+    ]
+);
 
 // or
 
-$db->exec("UPDATE books SET name = CONCAT(LEFT(name, 5), ' in ', RIGHT(name, 10)) WHERE year >= ? AND year < ?", [
-    1860,
-    1890
-]);
+$db->exec(
+    "UPDATE books SET name = CONCAT(LEFT(name, 5), ' in ', RIGHT(name, 10)) WHERE year >= ? AND year < ?",
+    [
+        1860,
+        1890
+    ]
+);
 ```
 
 For every statement that you execute, the return value will be the number of rows affected.
