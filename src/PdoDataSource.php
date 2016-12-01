@@ -178,7 +178,18 @@ final class PdoDataSource implements DataSource {
 
 		if (isset($this->hostname)) {
 			if ($this->driverName !== self::DRIVER_NAME_ORACLE) {
-				$components[] = 'host='.$this->hostname;
+				$hostname = $this->hostname;
+
+				// if we're trying to connect to a local database
+				if ($this->hostname === self::HOST_LOOPBACK_NAME) {
+					// if we're using a non-standard port
+					if (isset($this->port) && $this->port !== self::suggestPortFromDriverName($this->driverName)) {
+						// force usage of TCP over UNIX sockets for the port change to take effect
+						$hostname = self::HOST_LOOPBACK_IP;
+					}
+				}
+
+				$components[] = 'host='.$hostname;
 			}
 		}
 
