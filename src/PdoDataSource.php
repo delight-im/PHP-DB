@@ -19,8 +19,12 @@ final class PdoDataSource implements DataSource {
 	const DRIVER_NAME_SQLITE = 'sqlite';
 	/** The driver name for Oracle */
 	const DRIVER_NAME_ORACLE = 'oci';
+	/** Hostname for the virtual loopback interface */
+	const HOST_LOOPBACK_NAME = 'localhost';
+	/** IPv4 address for the virtual loopback interface */
+	const HOST_LOOPBACK_IP = '127.0.0.1';
 	/** The default hostname */
-	const HOST_DEFAULT = 'localhost';
+	const HOST_DEFAULT = self::HOST_LOOPBACK_NAME;
 
 	/** @var string the name of the driver, e.g. `mysql` or `pgsql` */
 	private $driverName;
