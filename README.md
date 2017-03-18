@@ -274,9 +274,9 @@ Typically, you'll want to sort the measurements before retrieving them, so that 
 $db->getProfiler()->sort();
 ```
 
-### Server information
+### Server and client information
 
-In order to retrieve some information about the database server that you're connected to, you can use one of the following methods:
+In order to retrieve some information about the database server that you're connected to or about the database client used by PHP, you can use one of the following methods:
 
 ```php
 $db->getDriverName();
@@ -287,6 +287,9 @@ $db->getServerInfo();
 
 $db->getServerVersion();
 // e.g. '5.5.5-10.1.13-MariaDB'
+
+$db->getClientVersion();
+// e.g. 'mysqlnd 5.0.1-dev'
 ```
 
 ## Contributing
