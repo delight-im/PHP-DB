@@ -279,13 +279,13 @@ $db->getProfiler()->sort();
 In order to retrieve some information about the database server that you're connected to, you can use one of the following methods:
 
 ```php
-$driver = $db->getDriverName();
+$db->getDriverName();
 // e.g. 'MySQL'
 
-$info = $db->getServerInfo();
+$db->getServerInfo();
 // e.g. 'Uptime: 82196  Threads: 1  Questions: 2840  Slow queries: 0  Opens: 23  Flush tables: 1  Open tables: 33  Queries per second avg: 0.736'
 
-$version = $db->getServerVersion();
+$db->getServerVersion();
 // e.g. '5.5.5-10.1.13-MariaDB'
 ```
 
