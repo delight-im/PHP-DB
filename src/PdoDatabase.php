@@ -32,6 +32,8 @@ final class PdoDatabase implements Database {
 	private $driverName;
 	/** @var Profiler|null the profiler that is used to analyze query performance during development */
 	private $profiler;
+	/** @var callable[] the list of pending callbacks to execute when the connection has been established */
+	private $onConnectListeners;
 
 	/**
 	 * Constructor
@@ -74,6 +76,7 @@ final class PdoDatabase implements Database {
 		$this->pdo = $pdoInstance;
 		$this->dsn = $pdoDsn;
 		$this->profiler = null;
+		$this->onConnectListeners = [];
 	}
 
 	/**
@@ -437,6 +440,21 @@ final class PdoDatabase implements Database {
 		}
 	}
 
+	public function addOnConnectListener(callable $onConnectListener) {
+		// if the database connection has not been established yet
+		if ($this->pdo === null) {
+			// schedule the callback for later execution
+			$this->onConnectListeners[] = $onConnectListener;
+		}
+		// if the database connection has already been established
+		else {
+			// execute the callback immediately
+			$onConnectListener($this);
+		}
+
+		return $this;
+	}
+
 	/** Makes sure that the connection is active and otherwise establishes it automatically */
 	private function ensureConnected() {
 		if ($this->pdo === null) {
@@ -446,6 +464,15 @@ final class PdoDatabase implements Database {
 			catch (PDOException $e) {
 				ErrorHandler::rethrow($e);
 			}
+
+			// iterate over all listeners waiting for the connection to be established
+			foreach ($this->onConnectListeners as $onConnectListener) {
+				// execute the callback
+				$onConnectListener($this);
+			}
+
+			// discard the listeners now that they have all been executed
+			$this->onConnectListeners = [];
 
 			$this->dsn = null;
 		}
