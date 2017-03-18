@@ -398,6 +398,17 @@ final class PdoDatabase implements Database {
 		return $this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
 	}
 
+	/**
+	 * Returns the version of the database client used by this instance
+	 *
+	 * @return string
+	 */
+	public function getClientVersion() {
+		$this->ensureConnected();
+
+		return $this->pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+	}
+
 	public function quoteIdentifier($identifier) {
 		$this->ensureConnected();
 
