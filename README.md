@@ -292,6 +292,16 @@ $db->getClientVersion();
 // e.g. 'mysqlnd 5.0.1-dev'
 ```
 
+### Listeners
+
+#### Connection established
+
+```php
+$db->addOnConnectListener(function (\Delight\Db\PdoDatabase $db) {
+	// do something
+});
+```
+
 ## Contributing
 
 All contributions are welcome! If you wish to contribute, please create an issue first so that your feature, problem or question can be discussed.
