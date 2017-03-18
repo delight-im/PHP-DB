@@ -217,4 +217,14 @@ interface Database {
 	 */
 	public function quoteLiteral($literal);
 
+	/**
+	 * Adds a listener that will execute as soon as the database connection has been established
+	 *
+	 * If the database connection has already been active before, the listener will execute immediately
+	 *
+	 * @param callable $onConnectListener the callback to execute
+	 * @return static this instance for chaining
+	 */
+	public function addOnConnectListener(callable $onConnectListener);
+
 }
