@@ -145,6 +145,26 @@ $db->insert(
 );
 ```
 
+#### Ignore duplicates
+
+You can update a key value if a duplicated value detected.
+
+```php
+$db->insertOnDuplicate(
+    'books','year','1933'
+    [
+        // set
+        'name' => 'Don Quixote',
+        'author' => 'Miguel de Cervantes',
+        'year' => 1612
+    ]
+);
+```
+
+if the book we are inserting exist in DB, we will update year.
+
+-------
+
 Does your table have automatically generated primary IDs? Access to these inserted IDs is available with another short method call. The sequence name is only required for *some* database drivers, e.g. PostgreSQL.
 
 ```php
