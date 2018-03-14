@@ -167,6 +167,31 @@ final class PdoDatabase implements Database {
 		// execute the (parameterized) statement and supply the values to be bound to it
 		return $this->exec($statement, array_values($insertMappings));
 	}
+   public function insertOnDuplicate($tableName, $duplicateKey , $duplicateValue, array $insertMappings  ) {
+        // if no values have been provided that could be inserted
+        if (empty($insertMappings)) {
+            // we cannot perform an insert here
+            throw new EmptyValueListError();
+        }
+
+        // escape the table name
+        $tableName = $this->quoteIdentifier($tableName);
+        // get the column names
+        $columnNames = array_keys($insertMappings);
+        // escape the column names
+        $columnNames = array_map([ $this, 'quoteIdentifier' ], $columnNames);
+        // build the column list
+        $columnList = implode(', ', $columnNames);
+        // prepare the values (which are placeholders only)
+        $values = array_fill(0, count($insertMappings), '?');
+        // build the value list
+        $placeholderList = implode(', ', $values);
+        // and finally build the full statement (still using placeholders)
+        $statement = 'INSERT INTO '.$tableName.' ('.$columnList.') VALUES ('.$placeholderList.') ON DUPLICATE KEY UPDATE '.$duplicateKey.'='.$duplicateValue.';';
+
+        // execute the (parameterized) statement and supply the values to be bound to it
+        return $this->exec($statement, array_values($insertMappings));
+    }
 
 	public function update($tableName, array $updateMappings, array $whereMappings) {
 		// if no values have been provided that we could update to
