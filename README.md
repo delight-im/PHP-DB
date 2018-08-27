@@ -36,7 +36,7 @@ Safe and convenient SQL database access in a driver-agnostic way
  * From a dynamic database configuration:
 
    ```php
-   $dataSource = new \Delight\Db\PdoDataSource('mysql');
+   $dataSource = new \Delight\Db\PdoDataSource('mysql'); // see "Available drivers for database systems" below
    $dataSource->setHostname('localhost');
    $dataSource->setPort(3306);
    $dataSource->setDatabaseName('my-database');
@@ -86,6 +86,14 @@ Safe and convenient SQL database access in a driver-agnostic way
    ```php
    $db = \Delight\Db\PdoDatabase::fromPdo($pdo, true);
    ```
+
+#### Available drivers for database systems
+
+```php
+\Delight\Db\PdoDataSource::DRIVER_NAME_MYSQL;
+\Delight\Db\PdoDataSource::DRIVER_NAME_POSTGRESQL;
+\Delight\Db\PdoDataSource::DRIVER_NAME_SQLITE;
+```
 
 ### Selecting data
 
