@@ -72,7 +72,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setHostname($hostname = null) {
-		$this->hostname = (string) $hostname;
+		$this->hostname = $hostname !== null ? (string) $hostname : null;
 
 		return $this;
 	}
@@ -84,7 +84,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setPort($port = null) {
-		$this->port = (int) $port;
+		$this->port = $port !== null ? (int) $port : null;
 
 		return $this;
 	}
@@ -96,7 +96,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setUnixSocket($unixSocket = null) {
-		$this->unixSocket = (string) $unixSocket;
+		$this->unixSocket = $unixSocket !== null ? (string) $unixSocket : null;
 
 		return $this;
 	}
@@ -108,7 +108,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setMemory($memory = null) {
-		$this->memory = (bool) $memory;
+		$this->memory = $memory !== null ? (bool) $memory : null;
 
 		return $this;
 	}
@@ -120,7 +120,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setFilePath($filePath = null) {
-		$this->filePath = (string) $filePath;
+		$this->filePath = $filePath !== null ? (string) $filePath : null;
 
 		return $this;
 	}
@@ -132,7 +132,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setDatabaseName($databaseName = null) {
-		$this->databaseName = (string) $databaseName;
+		$this->databaseName = $databaseName !== null ? (string) $databaseName : null;
 
 		return $this;
 	}
@@ -144,7 +144,7 @@ final class PdoDataSource implements DataSource {
 	 * @return static this instance for chaining
 	 */
 	public function setCharset($charset = null) {
-		$this->charset = (string) $charset;
+		$this->charset = $charset !== null ? (string) $charset : null;
 
 		return $this;
 	}
