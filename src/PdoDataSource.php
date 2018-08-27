@@ -237,7 +237,12 @@ final class PdoDataSource implements DataSource {
 		}
 
 		if (isset($this->charset)) {
-			$components[] = 'charset='.$this->charset;
+			if ($this->driverName === self::DRIVER_NAME_POSTGRESQL) {
+				$components[] = 'client_encoding='.$this->charset;
+			}
+			else {
+				$components[] = 'charset='.$this->charset;
+			}
 		}
 
 		if (isset($this->username)) {
