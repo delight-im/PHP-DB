@@ -71,7 +71,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $hostname the hostname where the database can be accessed, e.g. `db.example.com`
 	 * @return static this instance for chaining
 	 */
-	public function setHostname($hostname) {
+	public function setHostname($hostname = null) {
 		$this->hostname = (string) $hostname;
 
 		return $this;
@@ -83,7 +83,7 @@ final class PdoDataSource implements DataSource {
 	 * @param int|null $port the port number to use at the given host, e.g. `3306` or `5432`
 	 * @return static this instance for chaining
 	 */
-	public function setPort($port) {
+	public function setPort($port = null) {
 		$this->port = (int) $port;
 
 		return $this;
@@ -95,7 +95,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $unixSocket the UNIX socket to use, e.g. `/tmp/db.sock`
 	 * @return static this instance for chaining
 	 */
-	public function setUnixSocket($unixSocket) {
+	public function setUnixSocket($unixSocket = null) {
 		$this->unixSocket = (string) $unixSocket;
 
 		return $this;
@@ -107,7 +107,7 @@ final class PdoDataSource implements DataSource {
 	 * @param bool|null $memory whether to keep the database in memory only
 	 * @return static this instance for chaining
 	 */
-	public function setMemory($memory) {
+	public function setMemory($memory = null) {
 		$this->memory = (bool) $memory;
 
 		return $this;
@@ -119,7 +119,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $filePath the path to the file where the database can be accessed on disk, e.g. `/opt/databases/mydb.ext`
 	 * @return static this instance for chaining
 	 */
-	public function setFilePath($filePath) {
+	public function setFilePath($filePath = null) {
 		$this->filePath = (string) $filePath;
 
 		return $this;
@@ -131,7 +131,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $databaseName the name of the database, e.g. `my_application`
 	 * @return static this instance for chaining
 	 */
-	public function setDatabaseName($databaseName) {
+	public function setDatabaseName($databaseName = null) {
 		$this->databaseName = (string) $databaseName;
 
 		return $this;
@@ -143,7 +143,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $charset the character encoding, e.g. `utf8`
 	 * @return static this instance for chaining
 	 */
-	public function setCharset($charset) {
+	public function setCharset($charset = null) {
 		$this->charset = (string) $charset;
 
 		return $this;
@@ -155,7 +155,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $username the name of a user that can access the database
 	 * @return static this instance for chaining
 	 */
-	public function setUsername($username) {
+	public function setUsername($username = null) {
 		$this->username = $username;
 
 		return $this;
@@ -167,7 +167,7 @@ final class PdoDataSource implements DataSource {
 	 * @param string|null $password the password corresponding to the username
 	 * @return static this instance for chaining
 	 */
-	public function setPassword($password) {
+	public function setPassword($password = null) {
 		$this->password = $password;
 
 		return $this;
