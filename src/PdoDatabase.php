@@ -150,7 +150,7 @@ final class PdoDatabase implements Database {
 		}
 
 		// escape the table name
-		$tableName = $this->quoteIdentifier($tableName);
+		$tableName = $this->quoteTableName($tableName);
 		// get the column names
 		$columnNames = array_keys($insertMappings);
 		// escape the column names
@@ -182,7 +182,7 @@ final class PdoDatabase implements Database {
 		}
 
 		// escape the table name
-		$tableName = $this->quoteIdentifier($tableName);
+		$tableName = $this->quoteTableName($tableName);
 		// prepare a list for the values to be bound (both by the list of new values and by the conditions)
 		$bindValues = [];
 		// prepare a list for the individual directives of the `SET` clause
@@ -222,7 +222,7 @@ final class PdoDatabase implements Database {
 		}
 
 		// escape the table name
-		$tableName = $this->quoteIdentifier($tableName);
+		$tableName = $this->quoteTableName($tableName);
 		// prepare a list for the values to be bound by the conditions
 		$bindValues = [];
 		// prepare a list for the individual predicates of the `WHERE` clause
@@ -423,6 +423,10 @@ final class PdoDatabase implements Database {
 		}
 
 		return $char . str_replace($char, $char . $char, $identifier) . $char;
+	}
+
+	public function quoteTableName($tableName) {
+		return $this->quoteIdentifier($tableName);
 	}
 
 	public function quoteLiteral($literal) {

@@ -204,6 +204,20 @@ interface Database {
 	public function quoteIdentifier($identifier);
 
 	/**
+	 * Quotes a table name
+	 *
+	 * This allows for special characters and reserved keywords to be used in table names
+	 *
+	 * There is usually no need to call this method
+	 *
+	 * Table names should not be set from untrusted user input and in most cases not even from dynamic expressions
+	 *
+	 * @param string $tableName the table name to quote
+	 * @return string the quoted table name
+	 */
+	public function quoteTableName($tableName);
+
+	/**
 	 * Quotes a literal value (e.g. a string to insert or to use in a comparison) or an array thereof
 	 *
 	 * This allows for special characters to be used in literal values
