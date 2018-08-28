@@ -72,7 +72,7 @@ interface Database {
 	/**
 	 * Inserts the given mapping between columns and values into the specified table
 	 *
-	 * @param string $tableName the name of the table to insert into
+	 * @param string|string[] $tableName the name of the table to insert into (or an array of components of the qualified name)
 	 * @param array $insertMappings the mappings between columns and values to insert
 	 * @return int the number of inserted rows
 	 * @throws IntegrityConstraintViolationException
@@ -82,7 +82,7 @@ interface Database {
 	/**
 	 * Updates the specified table with the given mappings between columns and values
 	 *
-	 * @param string $tableName the name of the table to update
+	 * @param string|string[] $tableName the name of the table to update (or an array of components of the qualified name)
 	 * @param array $updateMappings the mappings between columns and values to update
 	 * @param array $whereMappings the mappings between columns and values to filter by
 	 * @return int the number of updated rows
@@ -93,7 +93,7 @@ interface Database {
 	/**
 	 * Deletes from the specified table where the given mappings between columns and values are found
 	 *
-	 * @param string $tableName the name of the table to delete from
+	 * @param string|string[] $tableName the name of the table to delete from (or an array of components of the qualified name)
 	 * @param array $whereMappings the mappings between columns and values to filter by
 	 * @return int the number of deleted rows
 	 */
@@ -212,7 +212,7 @@ interface Database {
 	 *
 	 * Table names should not be set from untrusted user input and in most cases not even from dynamic expressions
 	 *
-	 * @param string $tableName the table name to quote
+	 * @param string|string[] $tableName the table name to quote (or an array of components of the qualified name)
 	 * @return string the quoted table name
 	 */
 	public function quoteTableName($tableName);

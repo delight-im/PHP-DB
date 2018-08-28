@@ -426,7 +426,14 @@ final class PdoDatabase implements Database {
 	}
 
 	public function quoteTableName($tableName) {
-		return $this->quoteIdentifier($tableName);
+		if (\is_array($tableName)) {
+			$tableName = \array_map([ $this, 'quoteIdentifier' ], $tableName);
+
+			return \implode('.', $tableName);
+		}
+		else {
+			return $this->quoteIdentifier($tableName);
+		}
 	}
 
 	public function quoteLiteral($literal) {
