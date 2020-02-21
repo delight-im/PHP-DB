@@ -601,7 +601,7 @@ final class PdoDatabase implements Database {
 		$this->denormalizeConnection();
 
 		// if the result is empty
-		if (empty($results) && $stmt->rowCount() === 0) {
+		if (empty($results) && $stmt->rowCount() === 0 && ($this->driverName !== PdoDataSource::DRIVER_NAME_SQLITE || \is_bool($results) || \is_array($results))) {
 			// consistently return `null`
 			return null;
 		}
