@@ -186,6 +186,43 @@ Do you want to know how many rows have been updated by this operation? Just grab
 
 If you need to execute more advanced statements, please refer to section "Executing statements" below.
 
+### Increment or Decrement
+
+If you're familiar with knex.js for nodejs you should probably know these two methods, the 
+`increment` and `decrement` methods which they are super useful in order to increase or decrease e.g. user balance without
+selecting the columns.
+
+```php
+$db->increment(
+    'users',
+    [
+        'balance' => 25, // in case user balance is 24 it will be 49
+    ],
+    [
+        // where
+        'username' => "Adam"
+    ]
+);
+```
+
+the same thing goes for decrement
+
+```php
+$db->decrement(
+    'users',
+    [
+        'balance' => 10, // in case user balance is 24 it will be 14
+    ],
+    [
+        // where
+        'username' => "Adam"
+    ]
+);
+```
+
+Do you want to know how many rows have been effected by this operation? Just grab the return value from the `increment` or `decrement` method call.
+
+
 ### Deleting data
 
 Again, for simple deletions, you can use a convenient shorthand:
