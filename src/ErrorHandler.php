@@ -9,6 +9,7 @@
 namespace Delight\Db;
 
 use PDOException;
+use Delight\Db\Throwable\CheckIntegrityConstraintViolationException;
 use Delight\Db\Throwable\DatabaseNotFoundError;
 use Delight\Db\Throwable\DatabaseNotWritableError;
 use Delight\Db\Throwable\Error;
@@ -73,6 +74,10 @@ final class ErrorHandler {
 			// SQLite: 'NOT NULL' integrity constraint violation
 			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 NOT NULL constraint failed') !== false) {
 				throw new NotNullIntegrityConstraintViolationException($e->getMessage());
+			}
+			// SQLite: 'CHECK' integrity constraint violation
+			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 CHECK constraint failed') !== false) {
+				throw new CheckIntegrityConstraintViolationException($e->getMessage());
 			}
 			else {
 				throw new IntegrityConstraintViolationException($e->getMessage());
