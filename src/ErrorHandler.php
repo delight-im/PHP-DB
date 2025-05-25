@@ -84,6 +84,10 @@ final class ErrorHandler {
 		elseif ($errorClass === 'HY' && $errorSubClass === '000' && \stripos($e->getMessage(), 'General error: 1 no such column') !== false) {
 			throw new UnknownColumnError($e->getMessage());
 		}
+		// SQLite: Syntax error
+		elseif ($errorClass === 'HY' && $errorSubClass === '000' && \stripos($e->getMessage(), 'General error: 1') !== false && \stripos($e->getMessage(), 'syntax error') !== false) {
+			throw new SyntaxError($e->getMessage());
+		}
 		else {
 			if ($error === 1044) {
 				throw new WrongCredentialsError($e->getMessage());
