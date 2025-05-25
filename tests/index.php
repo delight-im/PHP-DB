@@ -268,6 +268,16 @@ catch (\Delight\Db\Throwable\UniqueIntegrityConstraintViolationException $e) {
 }
 ($uniqueIntegrityConstraintViolated === true) or \fail(__LINE__);
 
+// 'NOT NULL' constraints
+$notNullIntegrityConstraintViolated = false;
+try {
+	$db->insert('stuff', [ 'label' => null ]);
+}
+catch (\Delight\Db\Throwable\NotNullIntegrityConstraintViolationException $e) {
+	$notNullIntegrityConstraintViolated = true;
+}
+($notNullIntegrityConstraintViolated === true) or \fail(__LINE__);
+
 // clean up
 $db->exec('DELETE FROM stuff');
 
