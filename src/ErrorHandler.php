@@ -10,6 +10,7 @@ namespace Delight\Db;
 
 use PDOException;
 use Delight\Db\Throwable\DatabaseNotFoundError;
+use Delight\Db\Throwable\DatabaseNotWritableError;
 use Delight\Db\Throwable\Error;
 use Delight\Db\Throwable\Exception;
 use Delight\Db\Throwable\IntegrityConstraintViolationException;
@@ -87,6 +88,10 @@ final class ErrorHandler {
 		// SQLite: Syntax error
 		elseif ($errorClass === 'HY' && $errorSubClass === '000' && \stripos($e->getMessage(), 'General error: 1') !== false && \stripos($e->getMessage(), 'syntax error') !== false) {
 			throw new SyntaxError($e->getMessage());
+		}
+		// SQLite: Database not writable
+		elseif ($errorClass === 'HY' && $errorSubClass === '000' && \stripos($e->getMessage(), 'General error: 8 attempt to write a readonly database') !== false) {
+			throw new DatabaseNotWritableError($e->getMessage());
 		}
 		else {
 			if ($error === 1044) {
