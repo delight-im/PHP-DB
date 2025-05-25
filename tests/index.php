@@ -134,6 +134,80 @@ $res = $db->selectRow('SELECT title, axial_tilt_deg, symbol FROM planets WHERE t
 (\key($res) === 'symbol') or \fail(__LINE__);
 (\current($res) === "\xE2\x99\x80") or \fail(__LINE__);
 
+// select > COUNT(*)
+(\count($db->select('SELECT COUNT(*) AS cnt FROM planets')[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT COUNT(*) AS cnt FROM planets')[0]) === 'cnt') or \fail(__LINE__);
+((int) \current($db->select('SELECT COUNT(*) AS cnt FROM planets')[0]) === 8) or \fail(__LINE__);
+(\count($db->select('SELECT COUNT(symbol) AS cnt FROM planets')[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT COUNT(symbol) AS cnt FROM planets')[0]) === 'cnt') or \fail(__LINE__);
+((int) \current($db->select('SELECT COUNT(symbol) AS cnt FROM planets')[0]) === 5) or \fail(__LINE__);
+(\count($db->select('SELECT COUNT(*) AS cnt FROM planets WHERE title = ?', [ 'Sun' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT COUNT(*) AS cnt FROM planets WHERE title = ?', [ 'Sun' ])[0]) === 'cnt') or \fail(__LINE__);
+((int) \current($db->select('SELECT COUNT(*) AS cnt FROM planets WHERE title = ?', [ 'Sun' ])[0]) === 0) or \fail(__LINE__);
+(\count($db->select('SELECT COUNT(*) AS cnt FROM galaxies')[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT COUNT(*) AS cnt FROM galaxies')[0]) === 'cnt') or \fail(__LINE__);
+((int) \current($db->select('SELECT COUNT(*) AS cnt FROM galaxies')[0]) === 0) or \fail(__LINE__);
+
+// select > strings
+(\count($db->select('SELECT title FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT title FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0]) === 'title') or \fail(__LINE__);
+(\current($db->select('SELECT title FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0]) === 'Saturn') or \fail(__LINE__);
+(\count($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0]) === 'symbol') or \fail(__LINE__);
+(\current($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0]) === "\xE2\x99\x80") or \fail(__LINE__);
+(\count($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ear%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ear%' ])[0]) === 'symbol') or \fail(__LINE__);
+(\current($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ear%' ])[0]) === '') or \fail(__LINE__);
+(\count($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0]) === 'symbol') or \fail(__LINE__);
+(\current($db->select('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0]) === null) or \fail(__LINE__);
+
+// select > integers
+(\count($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0]) === 'rings') or \fail(__LINE__);
+((int) \current($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0]) === 1) or \fail(__LINE__);
+(\count($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0]) === 'rings') or \fail(__LINE__);
+((int) \current($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0]) === 0) or \fail(__LINE__);
+(\count($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0]) === 'discovery_year') or \fail(__LINE__);
+((int) \current($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0]) === 1781) or \fail(__LINE__);
+(\count($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Jup%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Jup%' ])[0]) === 'discovery_year') or \fail(__LINE__);
+(\current($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Jup%' ])[0]) === null) or \fail(__LINE__);
+
+// select > floats/doubles
+(\count($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]) === 'axial_tilt_deg') or \fail(__LINE__);
+((float) \current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]) > 28.31) or \fail(__LINE__);
+(\count($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]) === 'axial_tilt_deg') or \fail(__LINE__);
+((float) \current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]) < 0.01) or \fail(__LINE__);
+(\count($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0]) === 1) or \fail(__LINE__);
+(\key($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0]) === 'axial_tilt_deg') or \fail(__LINE__);
+(\current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0]) === null) or \fail(__LINE__);
+
+// select > not found
+($db->select('SELECT title FROM planets WHERE title LIKE ?', [ 'X%' ]) === null) or \fail(__LINE__);
+($db->select('SELECT rings FROM planets WHERE title LIKE ?', [ 'Y%' ]) === null) or \fail(__LINE__);
+($db->select('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Z%' ]) === null) or \fail(__LINE__);
+
+// select > three rows and three columns
+$res = $db->select('SELECT title, axial_tilt_deg, symbol FROM planets WHERE title LIKE ? AND title LIKE ? ORDER BY title ASC', [ '%a%', '%s%' ]);
+(\count($res) === 3) or \fail(__LINE__);
+(\count($res[0]) === 3) or \fail(__LINE__);
+(\count($res[1]) === 3) or \fail(__LINE__);
+(\count($res[2]) === 3) or \fail(__LINE__);
+($res[0]['title'] === 'Mars') or \fail(__LINE__);
+($res[0]['axial_tilt_deg'] === null) or \fail(__LINE__);
+($res[0]['symbol'] === "\xE2\x99\x82") or \fail(__LINE__);
+($res[1]['title'] === 'Saturn') or \fail(__LINE__);
+($res[1]['axial_tilt_deg'] === '26.73') or \fail(__LINE__);
+($res[1]['symbol'] === null) or \fail(__LINE__);
+($res[2]['title'] === 'Uranus') or \fail(__LINE__);
+($res[2]['axial_tilt_deg'] === '97.86') or \fail(__LINE__);
+($res[2]['symbol'] === null) or \fail(__LINE__);
+
 // clean up
 $db->exec('DELETE FROM stuff');
 
