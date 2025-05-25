@@ -76,6 +76,10 @@ final class ErrorHandler {
 				throw new SyntaxError($e->getMessage());
 			}
 		}
+		// SQLite: Table not found
+		elseif ($errorClass === 'HY' && $errorSubClass === '000' && \stripos($e->getMessage(), 'General error: 1 no such table') !== false) {
+			throw new TableNotFoundError($e->getMessage());
+		}
 		else {
 			if ($error === 1044) {
 				throw new WrongCredentialsError($e->getMessage());
