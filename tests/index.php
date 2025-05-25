@@ -208,6 +208,56 @@ $res = $db->select('SELECT title, axial_tilt_deg, symbol FROM planets WHERE titl
 ($res[2]['axial_tilt_deg'] === '97.86') or \fail(__LINE__);
 ($res[2]['symbol'] === null) or \fail(__LINE__);
 
+// selectColumn > COUNT(*)
+(\count($db->selectColumn('SELECT COUNT(*) AS cnt FROM planets')) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT COUNT(*) AS cnt FROM planets')[0] === 8) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT COUNT(symbol) AS cnt FROM planets')) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT COUNT(symbol) AS cnt FROM planets')[0] === 5) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT COUNT(*) AS cnt FROM planets WHERE title = ?', [ 'Sun' ])) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT COUNT(*) AS cnt FROM planets WHERE title = ?', [ 'Sun' ])[0] === 0) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT COUNT(*) AS cnt FROM galaxies')) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT COUNT(*) AS cnt FROM galaxies')[0] === 0) or \fail(__LINE__);
+
+// selectColumn > strings
+(\count($db->selectColumn('SELECT title FROM planets WHERE title LIKE ?', [ 'Sat%' ])) === 1) or \fail(__LINE__);
+($db->selectColumn('SELECT title FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0] === 'Saturn') or \fail(__LINE__);
+(\count($db->selectColumn('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ven%' ])) === 1) or \fail(__LINE__);
+($db->selectColumn('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0] === "\xE2\x99\x80") or \fail(__LINE__);
+(\count($db->selectColumn('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ear%' ])) === 1) or \fail(__LINE__);
+($db->selectColumn('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ear%' ])[0] === '') or \fail(__LINE__);
+(\count($db->selectColumn('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ura%' ])) === 1) or \fail(__LINE__);
+($db->selectColumn('SELECT symbol FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0] === null) or \fail(__LINE__);
+
+// selectColumn > integers
+(\count($db->selectColumn('SELECT rings FROM planets WHERE title LIKE ?', [ 'Sat%' ])) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT rings FROM planets WHERE title LIKE ?', [ 'Sat%' ])[0] === 1) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT rings FROM planets WHERE title LIKE ?', [ 'Ven%' ])) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT rings FROM planets WHERE title LIKE ?', [ 'Ven%' ])[0] === 0) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Ura%' ])) === 1) or \fail(__LINE__);
+((int) $db->selectColumn('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Ura%' ])[0] === 1781) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Jup%' ])) === 1) or \fail(__LINE__);
+($db->selectColumn('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Jup%' ])[0] === null) or \fail(__LINE__);
+
+// selectColumn > floats/doubles
+(\count($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])) === 1) or \fail(__LINE__);
+((float) $db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0] > 28.31) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])) === 1) or \fail(__LINE__);
+((float) $db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0] < 0.01) or \fail(__LINE__);
+(\count($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])) === 1) or \fail(__LINE__);
+($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0] === null) or \fail(__LINE__);
+
+// selectColumn > not found
+($db->selectColumn('SELECT title FROM planets WHERE title LIKE ?', [ 'X%' ]) === null) or \fail(__LINE__);
+($db->selectColumn('SELECT rings FROM planets WHERE title LIKE ?', [ 'Y%' ]) === null) or \fail(__LINE__);
+($db->selectColumn('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Z%' ]) === null) or \fail(__LINE__);
+
+// selectColumn > three rows
+$res = $db->selectColumn('SELECT title FROM planets WHERE title LIKE ? AND title LIKE ? ORDER BY title ASC', [ '%a%', '%s%' ]);
+(\count($res) === 3) or \fail(__LINE__);
+($res[0] === 'Mars') or \fail(__LINE__);
+($res[1] === 'Saturn') or \fail(__LINE__);
+($res[2] === 'Uranus') or \fail(__LINE__);
+
 // clean up
 $db->exec('DELETE FROM stuff');
 
