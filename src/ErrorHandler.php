@@ -17,6 +17,7 @@ use Delight\Db\Throwable\IntegrityConstraintViolationException;
 use Delight\Db\Throwable\NoDatabaseSelectedError;
 use Delight\Db\Throwable\SyntaxError;
 use Delight\Db\Throwable\TableNotFoundError;
+use Delight\Db\Throwable\UniqueIntegrityConstraintViolationException;
 use Delight\Db\Throwable\UnknownColumnError;
 use Delight\Db\Throwable\WrongCredentialsError;
 
@@ -64,7 +65,13 @@ final class ErrorHandler {
 			throw new NoDatabaseSelectedError($e->getMessage());
 		}
 		elseif ($errorClass === '23') {
-			throw new IntegrityConstraintViolationException($e->getMessage());
+			// SQLite: 'UNIQUE' integrity constraint violation
+			if ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 UNIQUE constraint failed') !== false) {
+				throw new UniqueIntegrityConstraintViolationException($e->getMessage());
+			}
+			else {
+				throw new IntegrityConstraintViolationException($e->getMessage());
+			}
 		}
 		elseif ($errorClass === '42') {
 			if ($errorSubClass === 'S02') {
