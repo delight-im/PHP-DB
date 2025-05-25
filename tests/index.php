@@ -38,3 +38,5 @@ $db->insert('stuff', [ 'label' => 'f6078d64ed1145f3bd56ea3da3332e5495e223d70f284
 
 // clean up
 $db->exec('DELETE FROM stuff');
+
+echo 'ALL TESTS PASSED' . "\n";
