@@ -117,28 +117,40 @@ final class PdoDatabase implements Database {
 	public function select($query, array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
-			return $stmt->fetchAll();
+
+			$results = $stmt->fetchAll();
+
+			return !empty($results) ? $results : null;
 		}, $query, $bindValues);
 	}
 
 	public function selectValue($query, array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
-			return $stmt->fetchColumn(0);
+
+			$results = $stmt->fetch(\PDO::FETCH_NUM);
+
+			return !empty($results) ? $results[0] : null;
 		}, $query, $bindValues);
 	}
 
 	public function selectRow($query, array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
-			return $stmt->fetch();
+
+			$results = $stmt->fetch();
+
+			return !empty($results) ? $results : null;
 		}, $query, $bindValues);
 	}
 
 	public function selectColumn($query, array $bindValues = null) {
 		return $this->selectInternal(function ($stmt) {
 			/** @var PDOStatement $stmt */
-			return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+			$results = $stmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+
+			return !empty($results) ? $results : null;
 		}, $query, $bindValues);
 	}
 
@@ -600,16 +612,8 @@ final class PdoDatabase implements Database {
 
 		$this->denormalizeConnection();
 
-		// if the result is empty
-		if (empty($results) && $stmt->rowCount() === 0 && ($this->driverName !== PdoDataSource::DRIVER_NAME_SQLITE || \is_bool($results) || \is_array($results))) {
-			// consistently return `null`
-			return null;
-		}
-		// if some results have been found
-		else {
-			// return these as extracted by the callback
-			return $results;
-		}
+		// return the results as extracted by the callback
+		return $results;
 	}
 
 }
