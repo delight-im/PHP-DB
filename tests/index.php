@@ -258,6 +258,16 @@ $res = $db->selectColumn('SELECT title FROM planets WHERE title LIKE ? AND title
 ($res[1] === 'Saturn') or \fail(__LINE__);
 ($res[2] === 'Uranus') or \fail(__LINE__);
 
+// 'UNIQUE' constraints
+$uniqueIntegrityConstraintViolated = false;
+try {
+	$db->insert('stuff', [ 'label' => 'f6078d64ed1145f3bd56ea3da3332e5495e223d70f284b87' ]);
+}
+catch (\Delight\Db\Throwable\UniqueIntegrityConstraintViolationException $e) {
+	$uniqueIntegrityConstraintViolated = true;
+}
+($uniqueIntegrityConstraintViolated === true) or \fail(__LINE__);
+
 // clean up
 $db->exec('DELETE FROM stuff');
 
