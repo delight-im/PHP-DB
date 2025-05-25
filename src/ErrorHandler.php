@@ -14,6 +14,7 @@ use Delight\Db\Throwable\DatabaseNotFoundError;
 use Delight\Db\Throwable\DatabaseNotWritableError;
 use Delight\Db\Throwable\Error;
 use Delight\Db\Throwable\Exception;
+use Delight\Db\Throwable\ForeignKeyIntegrityConstraintViolationException;
 use Delight\Db\Throwable\IntegrityConstraintViolationException;
 use Delight\Db\Throwable\NoDatabaseSelectedError;
 use Delight\Db\Throwable\NotNullIntegrityConstraintViolationException;
@@ -78,6 +79,10 @@ final class ErrorHandler {
 			// SQLite: 'CHECK' integrity constraint violation
 			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 CHECK constraint failed') !== false) {
 				throw new CheckIntegrityConstraintViolationException($e->getMessage());
+			}
+			// SQLite: 'FOREIGN KEY' integrity constraint violation
+			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 FOREIGN KEY constraint failed') !== false) {
+				throw new ForeignKeyIntegrityConstraintViolationException($e->getMessage());
 			}
 			else {
 				throw new IntegrityConstraintViolationException($e->getMessage());
