@@ -278,6 +278,16 @@ catch (\Delight\Db\Throwable\NotNullIntegrityConstraintViolationException $e) {
 }
 ($notNullIntegrityConstraintViolated === true) or \fail(__LINE__);
 
+// 'CHECK' constraints
+$checkIntegrityConstraintViolated = false;
+try {
+	$db->insert('stuff', [ 'label' => 'f6078d64ed1145f3bd56ea3da3332e5495e223d70f284b87ba58eca4543a695d4a01e92d92074954a73ba5b222ab34e2' ]);
+}
+catch (\Delight\Db\Throwable\CheckIntegrityConstraintViolationException $e) {
+	$checkIntegrityConstraintViolated = true;
+}
+($checkIntegrityConstraintViolated === true) or \fail(__LINE__);
+
 // clean up
 $db->exec('DELETE FROM stuff');
 
