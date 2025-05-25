@@ -26,10 +26,6 @@ function fail($lineNumber) {
 	exit('Error on line ' . $lineNumber);
 }
 
-$db = \Delight\Db\PdoDatabase::fromDsn(
-	new \Delight\Db\PdoDsn(
-		'mysql:dbname=my-database;host=localhost;charset=utf8mb4',
-		'my-username',
-		'my-password'
-	)
+$db = \Delight\Db\PdoDatabase::fromPdo(
+	new \PDO('sqlite:' . __DIR__ . '/../data/tests/main.sqlite')
 );
