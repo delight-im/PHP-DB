@@ -80,6 +80,10 @@ final class ErrorHandler {
 			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 NOT NULL constraint failed') !== false) {
 				throw new NotNullIntegrityConstraintViolationException($e->getMessage());
 			}
+			// MySQL: 'NOT NULL' integrity constraint violation
+			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 1048 Column') !== false) {
+				throw new NotNullIntegrityConstraintViolationException($e->getMessage());
+			}
 			// SQLite: 'CHECK' integrity constraint violation
 			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 CHECK constraint failed') !== false) {
 				throw new CheckIntegrityConstraintViolationException($e->getMessage());
