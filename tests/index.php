@@ -61,8 +61,8 @@ $db->insert('stuff', [ 'label' => 'f6078d64ed1145f3bd56ea3da3332e5495e223d70f284
 ($db->selectValue('SELECT discovery_year FROM planets WHERE title LIKE ?', [ 'Jup%' ]) === null) or \fail(__LINE__);
 
 // selectValue > floats/doubles
-((float) $db->selectValue('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ]) > 28.31) or \fail(__LINE__);
-((float) $db->selectValue('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ]) < 0.01) or \fail(__LINE__);
+$v = (float) $db->selectValue('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ]); ($v > 28.31 && $v < 28.33) or \fail(__LINE__);
+$v = (float) $db->selectValue('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ]); ($v > -0.01 && $v < 0.01) or \fail(__LINE__);
 ($db->selectValue('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ]) === null) or \fail(__LINE__);
 
 // selectValue > not found
@@ -115,10 +115,10 @@ $db->insert('stuff', [ 'label' => 'f6078d64ed1145f3bd56ea3da3332e5495e223d70f284
 // selectRow > floats/doubles
 (\count($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])) === 1) or \fail(__LINE__);
 (\key($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])) === 'axial_tilt_deg') or \fail(__LINE__);
-((float) \current($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])) > 28.31) or \fail(__LINE__);
+$v = (float) \current($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])); ($v > 28.31 && $v < 28.33) or \fail(__LINE__);
 (\count($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])) === 1) or \fail(__LINE__);
 (\key($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])) === 'axial_tilt_deg') or \fail(__LINE__);
-((float) \current($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])) < 0.01) or \fail(__LINE__);
+$v = (float) \current($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])); ($v > -0.01 && $v < 0.01) or \fail(__LINE__);
 (\count($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])) === 1) or \fail(__LINE__);
 (\key($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])) === 'axial_tilt_deg') or \fail(__LINE__);
 (\current($db->selectRow('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])) === null) or \fail(__LINE__);
@@ -135,7 +135,7 @@ $res = $db->selectRow('SELECT title, axial_tilt_deg, symbol FROM planets WHERE t
 (\current($res) === 'Venus') or \fail(__LINE__);
 \next($res);
 (\key($res) === 'axial_tilt_deg') or \fail(__LINE__);
-((float) \current($res) > 177.29) or \fail(__LINE__);
+$v = (float) \current($res); ($v > 177.29 && $v < 177.31) or \fail(__LINE__);
 \next($res);
 (\key($res) === 'symbol') or \fail(__LINE__);
 (\current($res) === "\xE2\x99\x80") or \fail(__LINE__);
@@ -185,10 +185,10 @@ $res = $db->selectRow('SELECT title, axial_tilt_deg, symbol FROM planets WHERE t
 // select > floats/doubles
 (\count($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]) === 1) or \fail(__LINE__);
 (\key($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]) === 'axial_tilt_deg') or \fail(__LINE__);
-((float) \current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]) > 28.31) or \fail(__LINE__);
+$v = (float) \current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]); ($v > 28.31 && $v < 28.33) or \fail(__LINE__);
 (\count($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]) === 1) or \fail(__LINE__);
 (\key($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]) === 'axial_tilt_deg') or \fail(__LINE__);
-((float) \current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]) < 0.01) or \fail(__LINE__);
+$v = (float) \current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]); ($v > -0.01 && $v < 0.01) or \fail(__LINE__);
 (\count($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0]) === 1) or \fail(__LINE__);
 (\key($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0]) === 'axial_tilt_deg') or \fail(__LINE__);
 (\current($db->select('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0]) === null) or \fail(__LINE__);
@@ -208,10 +208,10 @@ $res = $db->select('SELECT title, axial_tilt_deg, symbol FROM planets WHERE titl
 ($res[0]['axial_tilt_deg'] === null) or \fail(__LINE__);
 ($res[0]['symbol'] === "\xE2\x99\x82") or \fail(__LINE__);
 ($res[1]['title'] === 'Saturn') or \fail(__LINE__);
-($res[1]['axial_tilt_deg'] === '26.73') or \fail(__LINE__);
+$v = (float) $res[1]['axial_tilt_deg']; ($v > 26.72 && $v < 26.74) or \fail(__LINE__);
 ($res[1]['symbol'] === null) or \fail(__LINE__);
 ($res[2]['title'] === 'Uranus') or \fail(__LINE__);
-($res[2]['axial_tilt_deg'] === '97.86') or \fail(__LINE__);
+$v = (float) $res[2]['axial_tilt_deg']; ($v > 97.85 && $v < 97.87) or \fail(__LINE__);
 ($res[2]['symbol'] === null) or \fail(__LINE__);
 
 // selectColumn > COUNT(*)
@@ -246,9 +246,9 @@ $res = $db->select('SELECT title, axial_tilt_deg, symbol FROM planets WHERE titl
 
 // selectColumn > floats/doubles
 (\count($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])) === 1) or \fail(__LINE__);
-((float) $db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0] > 28.31) or \fail(__LINE__);
+$v = (float) $db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Nep%' ])[0]; ($v > 28.31 && $v < 28.33) or \fail(__LINE__);
 (\count($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])) === 1) or \fail(__LINE__);
-((float) $db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0] < 0.01) or \fail(__LINE__);
+$v = (float) $db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mer%' ])[0]; ($v > -0.01 && $v < 0.01) or \fail(__LINE__);
 (\count($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])) === 1) or \fail(__LINE__);
 ($db->selectColumn('SELECT axial_tilt_deg FROM planets WHERE title LIKE ?', [ 'Mar%' ])[0] === null) or \fail(__LINE__);
 
