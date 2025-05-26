@@ -72,6 +72,10 @@ final class ErrorHandler {
 			if ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 UNIQUE constraint failed') !== false) {
 				throw new UniqueIntegrityConstraintViolationException($e->getMessage());
 			}
+			// MySQL: 'UNIQUE' integrity constraint violation
+			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 1062 Duplicate entry') !== false) {
+				throw new UniqueIntegrityConstraintViolationException($e->getMessage());
+			}
 			// SQLite: 'NOT NULL' integrity constraint violation
 			elseif ($errorSubClass === '000' && \stripos($e->getMessage(), 'Integrity constraint violation: 19 NOT NULL constraint failed') !== false) {
 				throw new NotNullIntegrityConstraintViolationException($e->getMessage());
