@@ -96,6 +96,10 @@ final class ErrorHandler {
 				throw new IntegrityConstraintViolationException($e->getMessage());
 			}
 		}
+		// MySQL: 'CHECK' integrity constraint violation
+		elseif ($errorClass === '22' && $errorSubClass === '001' && \stripos($e->getMessage(), 'String data, right truncated: 1406 Data too long for column') !== false) {
+			throw new CheckIntegrityConstraintViolationException($e->getMessage());
+		}
 		elseif ($errorClass === '42') {
 			if ($errorSubClass === 'S02') {
 				throw new TableNotFoundError($e->getMessage());
