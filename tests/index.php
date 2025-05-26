@@ -33,6 +33,12 @@ $db = \Delight\Db\PdoDatabase::fromPdo(
 	new \PDO('sqlite:' . __DIR__ . '/../data/tests/main.sqlite')
 );
 
+$db->exec('PRAGMA busy_timeout = 5000;');
+$db->exec('PRAGMA synchronous = NORMAL;');
+
+(\strcasecmp($db->selectValue('PRAGMA journal_mode;'), 'wal') === 0) or \fail(__LINE__);
+(\strcasecmp($db->selectValue('PRAGMA encoding;'), 'utf-8') === 0) or \fail(__LINE__);
+
 // throw off 'PDOStatement#rowCount' method where used with 'SELECT' statements
 $db->insert('stuff', [ 'label' => 'f6078d64ed1145f3bd56ea3da3332e5495e223d70f284b87' ]);
 
