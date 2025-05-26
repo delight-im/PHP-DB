@@ -29,9 +29,9 @@ use Delight\Db\Throwable\WrongCredentialsError;
  *
  * For more information about possible exceptions and errors, see:
  *
- * https://en.wikibooks.org/wiki/Structured_Query_Language/SQLSTATE
+ * https://en.wikipedia.org/wiki/SQLSTATE
  *
- * https://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html
+ * https://dev.mysql.com/doc/mysql-errors/8.4/en/server-error-reference.html
  */
 final class ErrorHandler {
 
