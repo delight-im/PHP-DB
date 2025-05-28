@@ -226,7 +226,61 @@ final class PdoDatabase implements Database {
 		return $this->exec($statement, $bindValues);
 	}
 
-	public function delete($tableName, array $whereMappings) {
+    public function increment($tableName, array $updateMappings, array $whereMappings) {
+        return $this->incrementOrDecrement($tableName, $updateMappings, $whereMappings, 1);
+    }
+    public function decrement($tableName, array $updateMappings, array $whereMappings) {
+        return $this->incrementOrDecrement($tableName, $updateMappings, $whereMappings, 2);
+    }
+    private function incrementOrDecrement($tableName, array $updateMappings, array $whereMappings, $mode) {
+        $sign = $mode === 1 ? '+' : '-';
+        // if no values have been provided that we could update to
+        if (empty($updateMappings)) {
+            // we cannot perform an update here
+            throw new EmptyValueListError();
+        }
+
+        // if no values have been provided that we could filter by (which is possible but dangerous)
+        if (empty($whereMappings)) {
+            // we should not perform an update here
+            throw new EmptyWhereClauseError();
+        }
+
+        // escape the table name
+        $tableName = $this->quoteTableName($tableName);
+        // prepare a list for the values to be bound (both by the list of new values and by the conditions)
+        $bindValues = [];
+        // prepare a list for the individual directives of the `SET` clause
+        $setDirectives = [];
+
+        // for each mapping of a column name to its respective new value
+        foreach ($updateMappings as $updateColumn => $updateValue) {
+            // create an individual directive with the column name and a placeholder for the value
+            $column = $this->quoteIdentifier($updateColumn);
+            $setDirectives[] = $column . ' = '.$column.' '.$sign.' ?';
+            // and remember which value to bind here
+            $bindValues[] = $updateValue;
+        }
+
+        // prepare a list for the individual predicates of the `WHERE` clause
+        $wherePredicates = [];
+
+        // for each mapping of a column name to its respective value to filter by
+        foreach ($whereMappings as $whereColumn => $whereValue) {
+            // create an individual predicate with the column name and a placeholder for the value
+            $wherePredicates[] = $this->quoteIdentifier($whereColumn) . ' = ?';
+            // and remember which value to bind here
+            $bindValues[] = $whereValue;
+        }
+
+        // build the full statement (still using placeholders)
+        $statement = 'UPDATE '.$tableName.' SET '.implode(', ', $setDirectives).' WHERE '.implode(' AND ', $wherePredicates).';';
+
+        // execute the (parameterized) statement and supply the values to be bound to it
+        return $this->exec($statement, $bindValues);
+    }
+
+    public function delete($tableName, array $whereMappings) {
 		// if no values have been provided that we could filter by (which is possible but dangerous)
 		if (empty($whereMappings)) {
 			// we should not perform a deletion here
